@@ -10,7 +10,7 @@ A arquitetura da solução segue o fluxo:
 
 **API Externa (ViaIpe) -> Agente de Coleta (Python) -> Banco de Dados (PostgreSQL) -> Dashboard (Grafana)**
 
-1.  **Agente de Coleta**: Um serviço em Python que, a cada 5 minutos, consome o endpoint `https://viaipe.rnp.br/api/norte`.
+1.  **Agente de Coleta**: Um serviço em Python que, a cada 1 minuto, consome o endpoint `https://viaipe.rnp.br/api/norte`.
 2.  **Processamento**: O agente calcula métricas agregadas com base nos dados recebidos:
     * **Disponibilidade Média**: % de clientes com status "up".
     * **Banda Média**: Média de consumo de banda dos clientes online.
