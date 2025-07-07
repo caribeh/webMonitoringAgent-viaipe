@@ -6,7 +6,7 @@ import psycopg2
 
 # --- Configurações ---
 API_URL = "https://viaipe.rnp.br/api/norte"
-INTERVALO_SEGUNDOS = 60  # 1 minuto
+INTERVALO_SEGUNDOS = 300  # 5 minutos
 
 DB_HOST = os.getenv("DB_HOST", "postgres-db")
 DB_NAME = os.getenv("DB_NAME", "viaipe_db")
@@ -20,7 +20,10 @@ def get_db_connection():
     while True:
         try:
             conn = psycopg2.connect(
-                host=DB_HOST, dbname=DB_NAME, user=DB_USER, password=DB_PASSWORD
+                host=DB_HOST,
+                dbname=DB_NAME,
+                user=DB_USER,
+                password=DB_PASSWORD
             )
             print(">>> Conexão com o PostgreSQL estabelecida.", flush=True)
             return conn
@@ -118,3 +121,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+    
