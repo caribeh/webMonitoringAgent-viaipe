@@ -63,3 +63,4 @@ Para forçar um "reset" completo do ambiente (útil após corrigir algum arquivo
     ```bash
     docker-compose up --build -d
     ```
+
