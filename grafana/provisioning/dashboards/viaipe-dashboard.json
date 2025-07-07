@@ -1,0 +1,105 @@
+{
+  "__inputs": [
+    {
+      "name": "DS_POSTGRESQL",
+      "label": "PostgreSQL",
+      "description": "",
+      "type": "datasource",
+      "pluginId": "postgres",
+      "pluginName": "PostgreSQL"
+    }
+  ],
+  "__requires": [
+    {
+      "type": "grafana",
+      "id": "grafana",
+      "name": "Grafana",
+      "version": "8.0.0"
+    }
+  ],
+  "uid": "viaipe-norte-dashboard-v2",
+  "title": "ViaIpe - Desempenho Região Norte",
+  "timezone": "browser",
+  "panels": [
+    {
+      "id": 1,
+      "title": "Score de Qualidade da Rede",
+      "type": "gauge",
+      "gridPos": { "h": 9, "w": 8, "x": 0, "y": 0 },
+      "targets": [
+        {
+          "rawSql": "SELECT timestamp AS time, quality_score FROM viaipe_norte_stats ORDER BY timestamp DESC LIMIT 1",
+          "format": "table",
+          "refId": "A"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "percent",
+          "thresholds": { "mode": "absolute", "steps": [{ "color": "red", "value": null }, { "color": "orange", "value": 60 }, { "color": "green", "value": 80 }] }
+        }
+      }
+    },
+    {
+      "id": 2,
+      "title": "Clientes Reportando",
+      "type": "stat",
+      "gridPos": { "h": 9, "w": 8, "x": 8, "y": 0 },
+      "targets": [
+        {
+          "rawSql": "SELECT timestamp AS time, clients_reporting FROM viaipe_norte_stats ORDER BY timestamp DESC LIMIT 1",
+          "format": "table",
+          "refId": "A"
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "title": "Banda Média Total",
+      "type": "stat",
+      "gridPos": { "h": 9, "w": 8, "x": 16, "y": 0 },
+       "targets": [
+        {
+          "rawSql": "SELECT timestamp AS time, avg_bandwidth_mbps FROM viaipe_norte_stats ORDER BY timestamp DESC LIMIT 1",
+          "format": "table",
+          "refId": "A"
+        }
+      ],
+      "fieldConfig": { "defaults": { "unit": "mbps" } }
+    },
+    {
+      "id": 4,
+      "title": "Histórico de Qualidade e Latência",
+      "type": "timeseries",
+      "gridPos": { "h": 10, "w": 24, "x": 0, "y": 9 },
+      "targets": [
+        {
+          "alias": "Qualidade (%)",
+          "rawSql": "SELECT timestamp AS time, quality_score FROM viaipe_norte_stats WHERE $__timeFilter(timestamp) ORDER BY time",
+          "format": "time_series",
+          "refId": "A"
+        },
+        {
+          "alias": "Latência (ms)",
+          "rawSql": "SELECT timestamp AS time, avg_latency_ms FROM viaipe_norte_stats WHERE $__timeFilter(timestamp) ORDER BY time",
+          "format": "time_series",
+          "refId": "B"
+        }
+      ]
+    },
+    {
+      "id": 5,
+      "title": "Histórico de Consumo de Banda (Mbps)",
+      "type": "timeseries",
+      "gridPos": { "h": 10, "w": 24, "x": 0, "y": 19 },
+      "targets": [
+        {
+          "rawSql": "SELECT timestamp AS time, avg_bandwidth_mbps FROM viaipe_norte_stats WHERE $__timeFilter(timestamp) ORDER BY time",
+          "format": "time_series",
+          "refId": "A"
+        }
+      ],
+       "fieldConfig": { "defaults": { "unit": "mbps" } }
+    }
+  ]
+}

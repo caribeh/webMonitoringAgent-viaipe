@@ -1,0 +1,18 @@
+# /grafana/provisioning/datasources/datasource.yml
+apiVersion: 1
+
+datasources:
+  - name: 'PostgreSQL-Metrics'  # Nome que aparecerá no Grafana
+    type: 'postgres'
+    access: 'proxy'  # Acessar via o backend do Grafana
+    url: 'postgres-db:5432'
+    user: '${DB_USER}' # Usando variável de ambiente
+    database: '${DB_NAME}'
+    isDefault: true # Define esta como a fonte de dados padrão
+    editable: true
+    secureJsonData:
+      password: '${DB_PASSWORD}' # Forma segura de passar a senha
+    jsonData:
+      sslmode: 'disable' # Desabilitar SSL para a rede interna do Docker
+      postgresVersion: 1300 # Versão do Postgres (13)
+      timescaledb: false

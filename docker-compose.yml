@@ -1,0 +1,61 @@
+services:
+  viaipe-agent:
+    build: ./agent
+    container_name: viaipe-agent
+    restart: always
+    environment:
+      - DB_HOST=postgres-db
+      - DB_NAME=viaipe_db
+      - DB_USER=user
+      - DB_PASSWORD=password
+    depends_on:
+      - postgres-db
+    networks:
+      - viaipe-net
+
+  postgres-db:
+    image: postgres:13
+    container_name: postgres-db-viaipe
+    restart: always
+    environment:
+      - POSTGRES_DB=viaipe_db
+      - POSTGRES_USER=user
+      - POSTGRES_PASSWORD=password
+    volumes:
+      - ./postgres/init.sql:/docker-entrypoint-initdb.d/init.sql
+      # Volume nomeado especificamente para este projeto
+      - postgres-data-viaipe:/var/lib/postgresql/data
+    networks:
+      - viaipe-net
+
+  grafana:
+    image: grafana/grafana:latest
+    container_name: grafana-viaipe
+    restart: always
+    ports:
+      # Mapeado para a porta 3001 para não conflitar com o projeto anterior se ambos rodarem ao mesmo tempo
+      - "3001:3000"
+    volumes:
+      - ./grafana/provisioning/:/etc/grafana/provisioning/
+      # Volume nomeado especificamente para este projeto
+      - grafana-data-viaipe:/var/lib/grafana
+    environment:
+      - DB_USER=user
+      - DB_PASSWORD=password
+      - DB_NAME=viaipe_db
+      - GF_SECURITY_ADMIN_PASSWORD=admin
+    depends_on:
+      - postgres-db
+    networks:
+      - viaipe-net
+
+# Definição explícita dos volumes nomeados
+volumes:
+  postgres-data-viaipe:
+    name: webmonitoringagent-viaipe_postgres-data
+  grafana-data-viaipe:
+    name: webmonitoringagent-viaipe_grafana-data
+
+networks:
+  viaipe-net:
+    driver: bridge

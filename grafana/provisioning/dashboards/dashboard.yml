@@ -1,0 +1,12 @@
+# /grafana/provisioning/dashboards/dashboard.yml
+apiVersion: 1
+
+providers:
+- name: 'default' # Nome do provedor
+  orgId: 1
+  folder: '' # Salva o dashboard na pasta 'General'
+  type: file
+  disableDeletion: false
+  editable: true
+  options:
+    path: /etc/grafana/provisioning/dashboards # Caminho DENTRO do container
